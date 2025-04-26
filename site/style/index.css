@@ -19,6 +19,14 @@ body {
   margin: 0 auto;
 }
 
+.transparent-box {
+  background-color: rgba(0, 0, 0, 0.5); /* Fundo preto semitransparente */
+  padding: 20px;
+  border-radius: 10px;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
 /* Cabeçalho */
 .header {
   background-color: #6C2CC0;
