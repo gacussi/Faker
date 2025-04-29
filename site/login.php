@@ -1,12 +1,9 @@
-<!-- filepath: /home/gacussi/Área de Trabalho/faker/Faker/site/login.php -->
 <?php
-// Configuração do banco de dados
 $host = 'localhost';
 $dbname = 'estudai';
-$user = 'gacussi'; // Substitua pelo seu usuário do MySQL
-$password = 'Gui10davi'; // Substitua pela sua senha do MySQL
+$user = 'gacussi'; 
+$password = 'Gui10davi'; 
 
-// Variável para mensagens de erro ou sucesso
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -44,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>

@@ -1,4 +1,3 @@
-<!-- filepath: /home/gacussi/Área de Trabalho/faker/Faker/site/register.php -->
 <?php
 // Configuração do banco de dados
 $host = 'localhost';
