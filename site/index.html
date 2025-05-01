@@ -1,176 +1,193 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>EstudAI - Teste de Aprendizado</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(270deg, #7c4dff, #b388ff, #7c4dff);
-      background-size: 600% 600%;
-      animation: gradientAnimation 10s ease infinite;
-      margin: 0;
-      padding: 20px;
-      color: white;
-      text-align: center;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-    }
-    @keyframes gradientAnimation {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
-    }
-    .card {
-      background: #424242;
-      padding: 30px;
-      border-radius: 25px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      max-width: 700px;
-      width: 90%;
-      margin: auto;
-    }
-    .pergunta, .item {
-      background-color: #616161;
-      padding: 20px;
-      margin: 15px 0;
-      border-radius: 20px;
-      transition: background-color 0.3s, transform 0.3s;
-      cursor: pointer;
-    }
-    .pergunta:hover, .item:hover {
-      background-color: #7c4dff;
-      transform: scale(1.05);
-    }
-    .botao {
-      background-color: #b388ff;
-      color: #2e2e2e;
-      padding: 12px 25px;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      margin-top: 20px;
-      font-weight: bold;
-      font-size: 18px;
-      text-decoration: none;
-      transition: background-color 0.3s, transform 0.3s;
-      display: inline-block;
-    }
-    .botao:hover {
-      background-color: #d1c4e9;
-      transform: scale(1.08);
-    }
-    .progresso {
-      width: 90%;
-      background: #616161;
-      height: 20px;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-top: 20px;
-    }
-    .xp {
-      background: #b388ff;
-      height: 100%;
-      width: 0%;
-      transition: width 0.5s ease-in-out;
-    }
-    .medalhas {
-      margin-top: 20px;
-      font-size: 24px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Início - EstudAI</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+            background-color: #121212; /* Tema escuro */
+            color: #FFFFFF; /* Texto claro */
+            overflow: hidden; /* Remove barras de rolagem */
+        }
+
+        /* Cabeçalho */
+        .header {
+            position: sticky;
+            top: 0;
+            background-color: #6C2CC0;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .header nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 1rem;
+        }
+
+        .header nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Fundo de partículas */
+        #particleCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Coloca o canvas de fundo */
+        }
+
+        /* Caixa com texto */
+        .text-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7); /* Fundo escuro transparente */
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 700px;
+        }
+
+        .text-box h2 {
+            font-size: 3rem; /* Texto maior */
+            color: #6C2CC0;
+            margin-bottom: 20px;
+        }
+
+        .text-box p {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .text-box a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #6C2CC0;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .text-box a:hover {
+            background-color: #503C6B;
+        }
+    </style>
 </head>
 <body>
+    <!-- Cabeçalho -->
+    <header class="header">
+        <h1>Estud<span class="highlight">AI</span></h1>
+        <nav>
+            <a href="index.html">Início</a>
+            <a href="chat.html">Chat</a>
+            <a href="equipe.html">Equipe</a>
+        </nav>
+    </header>
 
-<div class="card" id="conteudo">
-  <h1>EstudAI - Descubra seu jeito de aprender</h1>
-  <h2 id="perguntaTitulo">Pergunta 1 de 5</h2>
+    <!-- Caixa de Texto -->
+    <div class="text-box">
+        <h2>Bem-vindo ao EstudAI</h2>
+        <p>Plataforma de bate papo sobre tecnologia e programação, <br> 
+	Entre na comunidade já e faça parte.</p>
+        <a href="register.php">Criar conta</a>
+    </div>
 
-  <div id="perguntaTexto" class="pergunta" onclick="responder('Visual')">Eu aprendo melhor vendo vídeos e imagens.</div>
-  <div id="opcao2" class="pergunta" onclick="responder('Auditivo')">Eu prefiro ouvir explicações em áudio.</div>
-  <div id="opcao3" class="pergunta" onclick="responder('Escrevendo')">Eu gosto de anotar e escrever para entender.</div>
+    <!-- Canvas para Animação de Partículas -->
+    <canvas id="particleCanvas"></canvas>
 
-  <div class="progresso">
-    <div class="xp" id="barraXP"></div>
-  </div>
-</div>
+    <script>
+        // Animação de partículas
+        const canvas = document.getElementById("particleCanvas");
+        const ctx = canvas.getContext("2d");
 
-<script>
-  const perguntas = [
-    {
-      texto: "Quando estou estudando, gosto de assistir vídeos.",
-      opcoes: ["Visual", "Auditivo", "Escrevendo"]
-    },
-    {
-      texto: "Prefiro ouvir um podcast sobre o assunto.",
-      opcoes: ["Auditivo", "Visual", "Escrevendo"]
-    },
-    {
-      texto: "Entendo melhor quando escrevo o que aprendi.",
-      opcoes: ["Escrevendo", "Visual", "Auditivo"]
-    },
-    {
-      texto: "Gráficos e mapas me ajudam muito.",
-      opcoes: ["Visual", "Auditivo", "Escrevendo"]
-    },
-    {
-      texto: "Falar sobre o assunto em voz alta me faz lembrar melhor.",
-      opcoes: ["Auditivo", "Escrevendo", "Visual"]
-    }
-  ];
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-  let indice = 0;
-  const respostas = { Visual: 0, Auditivo: 0, Escrevendo: 0 };
-  let xp = 0;
+        window.addEventListener("resize", () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
 
-  function responder(estilo) {
-    respostas[estilo]++;
-    xp += 20;
-    atualizarXP();
-    indice++;
+        const colors = ["#FFFFFF", "#E8E6E3", "#6C2CC0"];
+        const particles = [];
 
-    if (indice < perguntas.length) {
-      mostrarPergunta();
-    } else {
-      mostrarTrilha();
-    }
-  }
+        class Particle {
+            constructor(x, y, radius, color, velocity) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                this.color = color;
+                this.velocity = velocity;
+                this.alpha = 1;
+            }
 
-  function mostrarPergunta() {
-    document.getElementById("perguntaTitulo").innerText = `Pergunta ${indice + 1} de 5`;
-    document.getElementById("perguntaTexto").innerText = perguntas[indice].texto;
-    document.getElementById("perguntaTexto").setAttribute("onclick", `responder('${perguntas[indice].opcoes[0]}')`);
-    document.getElementById("opcao2").innerText = perguntas[indice].opcoes[1] === "Visual" ? "Eu gosto de ver imagens." : perguntas[indice].opcoes[1] === "Auditivo" ? "Prefiro ouvir áudios." : "Prefiro escrever enquanto estudo.";
-    document.getElementById("opcao2").setAttribute("onclick", `responder('${perguntas[indice].opcoes[1]}')`);
-    document.getElementById("opcao3").innerText = perguntas[indice].opcoes[2] === "Visual" ? "Aprendo com vídeos." : perguntas[indice].opcoes[2] === "Auditivo" ? "Prefiro escutar explicações." : "Entendo melhor anotando.";
-    document.getElementById("opcao3").setAttribute("onclick", `responder('${perguntas[indice].opcoes[2]}')`);
-  }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
 
-  function atualizarXP() {
-    document.getElementById("barraXP").style.width = xp + "%";
-  }
+            update() {
+                this.draw();
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= 0.003;
+            }
+        }
 
-  function mostrarTrilha() {
-    const estilo = Object.keys(respostas).reduce((a, b) => respostas[a] > respostas[b] ? a : b);
-    localStorage.setItem('estiloAluno', estilo);
+        function initParticles() {
+            setInterval(() => {
+                const radius = Math.random() * 5 + 2;
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const velocity = {
+                    x: (Math.random() - 0.5) * 2,
+                    y: (Math.random() - 0.5) * 2,
+                };
+                particles.push(new Particle(x, y, radius, color, velocity));
+            }, 100);
+        }
 
-    const medalha = estilo === "Visual" ? "🏅 Medalha Visual" : estilo === "Auditivo" ? "🏆 Medalha Auditiva" : "✏️ Medalha de Escrita";
+        function animateParticles() {
+            requestAnimationFrame(animateParticles);
+            ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((particle, index) => {
+                if (particle.alpha <= 0) {
+                    particles.splice(index, 1);
+                } else {
+                    particle.update();
+                }
+            });
+        }
 
-    const conteudo = document.getElementById('conteudo');
-    conteudo.innerHTML = `
-      <h2>Você é melhor aprendendo: <strong>${estilo}</strong></h2>
-      <div class="medalhas">${medalha}</div>
-
-      <p>Parabéns! Sua jornada de aprendizado vai ser ainda mais incrível!</p>
-
-      <a href="chat.html" class="botao">Começar a Estudar!</a>
-    `;
-  }
-</script>
-
+        initParticles();
+        animateParticles();
+    </script>
 </body>
 </html>

@@ -5,18 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contato - EstudAI</title>
     <link rel="stylesheet" href="style/equipe.css">
+<style>
+ .header {
+            position: sticky;
+            top: 0;
+            background-color: #6C2CC0;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .header nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 1rem;
+        }
+
+        .header nav a:hover {
+            text-decoration: underline;
+        }
+
+       h1 {
+	    width: 80px;
+       }
+</style>
 </head>
 <body>
 
-<header class="header">
-    <div class="container">
+ <header class="header">
         <h1>Estud<span class="highlight">AI</span></h1>
         <nav>
             <a href="index.html">Início</a>
-            <a href="contato.html" class="active">Contato</a>
+            <a href="chat.html">Chat</a>
+            <a href="equipe.html">Equipe</a>
         </nav>
-    </div>
-</header>
+    </header>
 
 <main class="main-content">
     <section class="team">
