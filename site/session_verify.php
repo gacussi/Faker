@@ -1,10 +1,10 @@
 <?php
-session_start(); // Iniciar a sessão
+session_start();
 
-// Verificar se o usuário está logado
-if (!isset($_SESSION['user_id'])) {
-    // Redirecionar para a página de login se não estiver logado
+// Verifica se o token de autenticação está configurado na sessão
+if (!isset($_SESSION['auth_token']) || empty($_SESSION['auth_token'])) {
+    // Redirecionar para login.php
     header("Location: login.php");
-    exit();
+    exit;
 }
 ?>

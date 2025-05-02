@@ -1,5 +1,5 @@
 <?php
-session_start(); // Iniciar a sessão
+session_start(); // Iniciar a sessão para autenticação
 
 // Configuração do banco de dados
 $host = 'localhost';
@@ -7,47 +7,62 @@ $dbname = 'estudai';
 $user = 'gacussi';
 $password = 'Gui10davi';
 
+// Variável para mensagens de erro ou sucesso
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
+        // Conexão com o banco de dados
         $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $username = $_POST['username'];
-        $password = $_POST['password'];
+        // Receber os dados do formulário
+        $login = trim($_POST['login']); // Pode ser e-mail ou nome de usuário
+        $password = trim($_POST['password']);
 
-        if (empty($username) || empty($password)) {
+        // Verificar se todos os campos foram preenchidos
+        if (empty($login) || empty($password)) {
             $message = "Por favor, preencha todos os campos.";
         } else {
-            $sql = "SELECT * FROM usuarios WHERE username = :username";
+            // Buscar o usuário no banco de dados (pelo nome de usuário ou e-mail)
+            $sql = "SELECT * FROM usuarios WHERE email = :login OR username = :login";
             $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':username', $username);
+            $stmt->bindParam(':login', $login);
             $stmt->execute();
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($user && password_verify($password, $user['password'])) {
-                // Login bem-sucedido
-                $_SESSION['user_id'] = $user['id']; // Armazena o ID do usuário na sessão
-                $_SESSION['username'] = $user['username']; // Opcional: armazenar o nome de usuário
-                header("Location: chat.html");
-                exit();
+            if ($user) {
+                echo "Usuário encontrado: " . $user['username'] . "<br>"; // Depuração
+                // Verificar a senha
+                if (password_verify($password, $user['password'])) {
+                    echo "Senha verificada! <br>"; // Depuração
+
+                    // Gerar token de autenticação
+                    $token = bin2hex(random_bytes(16));
+                    $_SESSION['auth_token'] = $token;
+                    $_SESSION['username'] = $user['username'];
+
+                    // Redirecionar para chat.php
+                    header("Location: chat.php?token=$token");
+                    exit;
+                } else {
+                    echo "Senha incorreta."; // Depuração
+                }
             } else {
-                $message = "Usuário ou senha inválidos.";
+                echo "Usuário ou e-mail não encontrado."; // Depuração
             }
         }
     } catch (PDOException $e) {
-        $message = "Erro ao conectar ao banco de dados: " . $e->getMessage();
+        echo "Erro ao conectar ao banco de dados: " . $e->getMessage(); // Depuração
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EstudAI - LOGIN</title>
+    <title>EstudAI - Login</title>
     <link rel="stylesheet" href="style/form.css">
 </head>
 <body>
@@ -55,14 +70,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="container">
             <h1 class="animate-title">Estud<span class="highlight">AI</span></h1>
             <nav>
-                <a href="index.html">Inicio</a>
+                <a href="index.html">Início</a>
                 <a href="equipe.html">Equipe</a>
             </nav>
         </div>
     </header>
-    <br>
-    <br>
-    <br>
+    <br><br><br>
     <main class="main-content">
         <section class="hero">
             <div class="container">
@@ -73,8 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <p style="color: red; text-align: center;"><?php echo $message; ?></p>
                     <?php endif; ?>
                     <form id="login-form" action="login.php" method="POST">
-                        <label for="username" style="text-align: left;">Usuário:</label>
-                        <input type="text" id="username" name="username" required>
+                        <label for="login" style="text-align: left;">E-mail ou Usuário:</label>
+                        <input type="text" id="login" name="login" required>
 
                         <label for="password" style="text-align: left;">Senha:</label>
                         <input type="password" id="password" name="password" required>
@@ -84,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <br>
                         <div style="text-align: center;">
                             <a href="register.php">
-                                <button type="button">Cadastre-se</button>
+                                <button type="button">Registrar-se</button>
                             </a>
                         </div>
                     </form>

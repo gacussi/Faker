@@ -1,9 +1,11 @@
 <?php
+session_start(); // Iniciar a sessão para armazenar o token de autenticação
+
 // Configuração do banco de dados
 $host = 'localhost';
 $dbname = 'estudai';
-$user = 'gacussi'; // Substitua pelo seu usuário do MySQL
-$password = 'Gui10davi'; // Substitua pela sua senha do MySQL
+$user = 'gacussi'; 
+$password = 'Gui10davi'; 
 
 // Variável para mensagens de erro ou sucesso
 $message = '';
@@ -15,42 +17,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // Receber os dados do formulário
-        $username = $_POST['username'];
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+        $username = trim($_POST['username']);
+        $email = trim($_POST['email']);
+        $password = trim($_POST['password']);
 
         // Verificar se todos os campos foram preenchidos
         if (empty($username) || empty($email) || empty($password)) {
             $message = "Por favor, preencha todos os campos.";
         } else {
-            // Criptografar a senha
-            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+            // Verificar se o e-mail ou o nome de usuário já existem
+            $sqlCheck = "SELECT COUNT(*) FROM usuarios WHERE email = :email OR username = :username";
+            $stmtCheck = $pdo->prepare($sqlCheck);
+            $stmtCheck->bindParam(':email', $email);
+            $stmtCheck->bindParam(':username', $username);
+            $stmtCheck->execute();
+            $count = $stmtCheck->fetchColumn();
 
-            // Inserir os dados no banco de dados
-            $sql = "INSERT INTO usuarios (username, password, email) VALUES (:username, :password, :email)";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':username', $username);
-            $stmt->bindParam(':password', $hashedPassword);
-            $stmt->bindParam(':email', $email);
-
-            if ($stmt->execute()) {
-                // Redirecionar para chat.html após o registro bem-sucedido
-                header("Location: chat.html");
-                exit;
+            if ($count > 0) {
+                $message = "Erro: Nome de usuário ou e-mail já cadastrados.";
             } else {
-                $message = "Erro ao registrar o usuário.";
+                // Criptografar a senha
+                $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+
+                // Inserir os dados no banco de dados
+                $sqlInsert = "INSERT INTO usuarios (username, password, email) VALUES (:username, :password, :email)";
+                $stmtInsert = $pdo->prepare($sqlInsert);
+                $stmtInsert->bindParam(':username', $username);
+                $stmtInsert->bindParam(':password', $hashedPassword);
+                $stmtInsert->bindParam(':email', $email);
+
+                if ($stmtInsert->execute()) {
+                    // Gerar token de autenticação
+                    $token = bin2hex(random_bytes(16));
+                    $_SESSION['auth_token'] = $token;
+                    $_SESSION['username'] = $username;
+
+                    // Redirecionar para chat.php
+                    header("Location: chat.php?token=$token");
+                    exit;
+                } else {
+                    $message = "Erro ao registrar o usuário.";
+                }
             }
         }
     } catch (PDOException $e) {
-        if ($e->getCode() === '23000') {
-            $message = "Erro: Email já cadastrado.";
-        } else {
-            $message = "Erro ao conectar ao banco de dados: " . $e->getMessage();
-        }
+        $message = "Erro ao conectar ao banco de dados: " . $e->getMessage();
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -81,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php if (!empty($message)): ?>
                         <p style="color: red; text-align: center;"><?php echo $message; ?></p>
                     <?php endif; ?>
-                    <form id="login-form" action="register.php" method="POST">
+                    <form id="register-form" action="register.php" method="POST">
                         <label for="username" style="text-align: left;">Usuário:</label>
                         <input type="text" id="username" name="username" required>
 
